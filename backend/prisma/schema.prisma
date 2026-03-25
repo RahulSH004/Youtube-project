@@ -15,6 +15,7 @@ datasource db {
 model User{
   id          String    @id    @default(uuid())
   username    String
+  email       String    @unique @default("")
   password    String
   gender      Gender
   ChannelName String
