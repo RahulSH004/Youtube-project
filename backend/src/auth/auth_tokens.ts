@@ -1,8 +1,9 @@
+import 'dotenv/config';
+import  jwt  from 'jsonwebtoken';
 // implement access token and refresh token both
-export async function generateaccesstoken(){
 
-}
-
-export async function refreshtoken(){
-    
+export const access_token = process.env.ACCESS_TOKEN as string;
+export async function generateaccesstoken(user_id: string){
+    const accesstoken = jwt.sign({user_id}, access_token, {expiresIn: '1hr', algorithm: 'RS256'})
+    return (accesstoken);
 }

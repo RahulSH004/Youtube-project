@@ -1,9 +1,8 @@
-import { password } from 'bun'
 import {z} from 'zod'
 import { Gender } from '../../generated/prisma/enums'
 
 
-const signupschema = z.object({
+export const signupschema = z.object({
     username: z.string().min(3),
     email: z.email(),
     password: z.string().min(8),
@@ -11,7 +10,7 @@ const signupschema = z.object({
     channelName: z.string().min(3)
 })
 
-const signinschema = z.object({
+export const signinschema = z.object({
     email: z.email(),
     password: z.string().min(8)
 })
