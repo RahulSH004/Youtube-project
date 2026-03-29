@@ -4,9 +4,7 @@ export class ApiError extends Error {
 
         message : string
     ){
-        super(message),
-        this.statuscode = statuscode
-        this.message = message
+        super(message)
         this.name = 'ApiError'
     }
 }

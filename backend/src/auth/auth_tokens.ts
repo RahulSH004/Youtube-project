@@ -4,6 +4,9 @@ import  jwt  from 'jsonwebtoken';
 
 export const access_token = process.env.ACCESS_TOKEN as string;
 export async function generateaccesstoken(user_id: string){
-    const accesstoken = jwt.sign({user_id}, access_token, {expiresIn: '1hr', algorithm: 'RS256'})
+    const accesstoken = jwt.sign(
+        {user_id}, 
+        access_token, 
+        {expiresIn: '1h', algorithm: 'HS256'})
     return (accesstoken);
 }

@@ -5,7 +5,7 @@ import { signupController, signinController } from "./auth_controller";
 
 const authRouter = Router();
 
-authRouter.post("/signup", validate(signupschema), signupController)
-authRouter.post("/signin", validate(signinschema), signinController);
+authRouter.post("/auth/signup", validate(signupschema), signupController)
+authRouter.post("/auth/signin", validate(signinschema), signinController);
 
 export default authRouter;
