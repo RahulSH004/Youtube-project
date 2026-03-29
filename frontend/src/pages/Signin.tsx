@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { signinApi } from "../api/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 
 export default function SignIn(){
@@ -37,19 +37,22 @@ export default function SignIn(){
                     placeholder="Email"
                     className="w-full p-2 mb-4 rounded bg-gray-700 text-white"
                  />
-                 <input
+                <input
                     name="password"
                     value={FormData.password}
                     onChange={handlechange}
                     placeholder="Password"
                     className="w-full p-2 mb-4 rounded bg-gray-700 text-white"
                     type="password"
-                 />
-                 <button 
+                />
+                <button 
                     onClick={handlesubmit}
                     className="w-full bg-indigo-600 text-white p-2 rounded">
                     SignIn
-                 </button>
+                </button>
+                <p className="text-white text-m  mt-2">
+                    Don't have an account? <Link to="/Signup" className="text-blue-400">Signup</Link>
+                </p>
             </div>
 
         </div>

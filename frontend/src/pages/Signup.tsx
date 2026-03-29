@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { signupApi } from "../api/auth"
+import { Link } from "react-router-dom"
 
 export default function Signup(){
 
@@ -71,6 +72,9 @@ export default function Signup(){
                 >
                     Sign Up
                 </button>
+                <p className="text-white items-center justify-center text-m  mt-2">
+                    Already have an account? <Link to="/SignIn" className="text-blue-400">SignIn</Link>
+                </p>
             </div>
         </div>
     )
