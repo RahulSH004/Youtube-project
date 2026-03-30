@@ -3,14 +3,13 @@ import { ApiError } from "../utils/ApiError";
 import jwt from 'jsonwebtoken';
 import { access_token } from "./auth_tokens";
 import { prisma } from "../../db";
-import { ApiResponse } from "../utils/ApiResponse";
 import { ZodSchema } from "zod";
 
 export async function authmiddleware(req: Request, res: Response, next: NextFunction){
     const authHeader = req.headers['authorization'];
     if(!authHeader) throw new ApiError(401, "Unauthorized")
 
-    const token = authHeader.split(" ")[1];
+    const token = req.cookies.access_token ||authHeader.split(" ")[1];
     if(!token) throw new ApiError(401, "Unauthorized")
     try {
         const decode = jwt.verify(token, access_token) as {id: string};
