@@ -19,20 +19,44 @@ model User{
   password    String
   gender      Gender
   ChannelName String
+  ChannelThumbnail  String?
   Banner      String?
   ProfilePicture  String?
   SubscriberCount Int         @default(0)
   Description  String?
   uploads       Uploads[]
+  likes         Like[]
+  subscription  Subscription[]
 }
 model Uploads{
   id      String    @id     @default(uuid())
+  title   String
   slug    String
   videoUrl String
   Thumbnail String
+  type      UploadType @default(PUBLIC)
   UserId    String
   user      User     @relation(fields: [UserId], references: [id])
   createdAt  DateTime     @default(now())
+  likes       Like[]
+}
+model Like{
+  id    String @id  @default(uuid())
+  userId String
+  uploadId String
+  user    User  @relation(fields: [userId], references: [id])
+  upload Uploads @relation(fields: [uploadId], references: [id])
+
+  @@unique([userId, uploadId])
+}
+
+model Subscription{
+  id    String    @id   @default(uuid())
+  subscriberId  String
+  channelUserId String
+  subscriber    User   @relation(fields: [subscriberId], references: [id])
+
+  @@unique([subscriberId, channelUserId])
 }
 
 enum Gender {
@@ -40,4 +64,8 @@ enum Gender {
   Female
   Others
 }
-
+enum UploadType{
+  PUBLIC
+  PRIVATE
+  UNLISTED
+}
