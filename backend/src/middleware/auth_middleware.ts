@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction, application } from "express";
 import { ApiError } from "../utils/ApiError";
 import jwt from 'jsonwebtoken';
-import { access_token } from "./auth_tokens";
+import { access_token } from "../schema/auth_tokens";
 import { prisma } from "../../db";
 import { ZodSchema } from "zod";
 

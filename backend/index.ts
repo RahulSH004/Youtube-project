@@ -1,7 +1,7 @@
 import express from "express";
 import 'dotenv/config'
 import cors from 'cors'
-import authRouter from "./src/auth/auth_routes";
+import authRouter from "./src/routes/auth_routes";
 import { errorHandler } from "./src/utils/ErrorHandler";
 import cookieParser from 'cookie-parser'
 const PORT = process.env.PORT;

@@ -1,8 +1,8 @@
 import { prisma } from "../../db";
-import { signupschema, type SigninSchema, type SignupSchema } from "./auth_schema";
+import { signupschema, type SigninSchema, type SignupSchema } from "../schema/auth_schema";
 import { ApiError } from "../utils/ApiError";
 import bcrypt from "bcrypt";
-import { generateaccesstoken } from "./auth_tokens";
+import { generateaccesstoken } from "../schema/auth_tokens";
 import e from "express";
 
 const saltround = Number(Bun.env.Salt_Round ?? 10);
