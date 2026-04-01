@@ -4,6 +4,7 @@ import cors from 'cors'
 import authRouter from "./src/routes/auth_routes";
 import { errorHandler } from "./src/utils/ErrorHandler";
 import cookieParser from 'cookie-parser'
+import getVideosRouter from "./src/routes/get_videos_routes";
 const PORT = process.env.PORT;
 
 const app = express()
@@ -16,7 +17,7 @@ app.use(express.json());
 app.use(cookieParser())
 
 app.use("/api", authRouter);
-
+app.use("/api", getVideosRouter);
 app.use(errorHandler);
 
 app.listen(PORT ,() => {
