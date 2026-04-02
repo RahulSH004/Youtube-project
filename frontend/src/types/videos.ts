@@ -5,7 +5,7 @@ export interface Video {
     videoUrl: string;
     Thumbnail: string;
     type: string;
-    User: {
+    user: {
         ChannelName: string;
         ProfilePicture?: string
     }

@@ -22,14 +22,15 @@ export default function Home(){
     }, [])
     return (
         <div>
-            {isLoading ? <div>Loading...</div> : <div>
+            {isLoading ? <div>Loading...</div> : <div className="flex flex-auto">
                 {videos.map((video) => (
-                    <VideoCard key={video.id}
-                        id={video.id}
+                    <VideoCard 
+                        key={video.id}
                         thumbnail={video.Thumbnail}
+                        videoUrl={video.videoUrl}
                         title={video.title}
-                        profilePicture={video.User?.ProfilePicture}
-                        channelName={video.User?.ChannelName}
+                        profilePicture={video.user?.ProfilePicture}
+                        channelName={video.user?.ChannelName}
                     />
                 ))}
             </div>}
