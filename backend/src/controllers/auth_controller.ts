@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { siginservice, signupservice } from "./auth_service";
+import { siginservice, signupservice } from "../services/auth_service";
 import { ApiResponse } from "../utils/ApiResponse";
 
 export async function signupController(req: Request, res:Response){

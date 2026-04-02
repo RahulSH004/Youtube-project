@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getvideosservice } from "../services/get_videos_service";
+import { getvideoController } from "../controllers/getvideo_controller";
 
 const getVideosRouter = Router();
 
-getVideosRouter.get("/", getvideosservice)
+getVideosRouter.get("/", getvideoController)
 
 export default getVideosRouter;
