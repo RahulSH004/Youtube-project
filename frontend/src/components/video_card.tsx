@@ -18,11 +18,7 @@ export const VideoCard = ({thumbnail, title, channelName, profilePicture}: CardP
             className="size-full object-cover transition-transform duration-300 group-hover:scale-105" 
           />
         </div>
-  
-        {/* Meta Data Row */}
         <div className="mt-3 flex gap-3">
-          
-          {/* Profile Picture */}
           <div className="shrink-0">
             {profilePicture ? (
               <img
@@ -34,8 +30,6 @@ export const VideoCard = ({thumbnail, title, channelName, profilePicture}: CardP
               <div className="size-9 rounded-full bg-neutral-200 animate-pulse" />
             )}
           </div>
-  
-          {/* Text Details */}
           <div className="flex flex-col pr-2">
             <h3 className="line-clamp-2 text-sm font-bold leading-tight text-neutral-900 group-hover:text-blue-600">
               {title}

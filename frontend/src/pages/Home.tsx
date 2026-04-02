@@ -2,10 +2,12 @@ import { useEffect, useState } from "react"
 import { api } from "../api/axios"
 import { Video } from "../types/videos"
 import { VideoCard } from "../components/video_card"
+import { useNavigate } from "react-router-dom"
 
 export default function Home(){
     const [videos, setVideos] = useState<Video[]>([])
     const [isLoading, setIsLoading] = useState(true)
+    const navigate = useNavigate()
 
     const fetchvideos = async() => {
         try{
@@ -24,14 +26,19 @@ export default function Home(){
         <div>
             {isLoading ? <div>Loading...</div> : <div className="flex flex-auto">
                 {videos.map((video) => (
-                    <VideoCard 
+                    <div
                         key={video.id}
+                        onClick={() => navigate(`/video/${video.id}`)}
+                        className="cursor-pointer"
+                    >
+                    <VideoCard 
                         thumbnail={video.Thumbnail}
                         videoUrl={video.videoUrl}
                         title={video.title}
                         profilePicture={video.user?.ProfilePicture}
                         channelName={video.user?.ChannelName}
-                    />
+                        />
+                    </div>
                 ))}
             </div>}
         </div>
