@@ -25,6 +25,13 @@ export default function Videopage(){
             fetchvideos()
         }
     },[id])
+    if(isLoading){
+        return (
+            <div className="flex h-[60vh] items-center justify-center">
+              <div className="size-10 animate-spin rounded-full border-4 border-neutral-300 border-t-blue-600" />
+            </div>
+        );
+    }
     if (!video) {
         return <div className="p-8 text-center text-red-500 font-medium">Video not found.</div>;
     }
