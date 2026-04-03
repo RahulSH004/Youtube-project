@@ -6,3 +6,5 @@ export const upload = z.object({
     videoTitle: z.string(),
     videoDescription: z.string()
 })
+
+export type UploadSchema = z.infer<typeof upload>
