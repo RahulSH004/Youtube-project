@@ -11,7 +11,6 @@ export default function Videopage(){
 
     useEffect(() => {
         const fetchvideos = async() => {
-
             try{
                 const response = await api.get(`/video/${id}`)
                 setVideo(response.data.data);

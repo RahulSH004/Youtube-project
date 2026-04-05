@@ -7,7 +7,7 @@ interface CardProps {
     profilePicture?: string;
 }
 
-export const VideoCard = ({id,thumbnail, title, channelName, profilePicture}: CardProps) => {
+export const VideoCard = ({thumbnail, title, channelName, profilePicture}: CardProps) => {
     return (
     <div className="w-full max-w-[360px] cursor-pointer group m-2">
       
