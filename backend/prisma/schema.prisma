@@ -12,46 +12,57 @@ datasource db {
   provider = "postgresql"
 }
 
-model User{
-  id          String    @id    @default(uuid())
-  username    String
-  email       String    @unique @default("")
-  password    String
-  gender      Gender
-  ChannelName String
-  ChannelThumbnail  String?
-  Banner      String?
-  ProfilePicture  String?
-  SubscriberCount Int         @default(0)
-  Description  String?
-  uploads       Uploads[]
-  likes         Like[]
-  subscription  Subscription[]
+model User {
+  id               String         @id @default(uuid())
+  username         String
+  email            String         @unique @default("")
+  password         String
+  gender           Gender
+  ChannelName      String
+  ChannelThumbnail String?
+  Banner           String?
+  ProfilePicture   String?
+  SubscriberCount  Int            @default(0)
+  Description      String?
+  uploads          Uploads[]
+  likes            Like[]
+  subscription     Subscription[]
+  name             String
+  emailVerified    Boolean        @default(false)
+  image            String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  sessions         Session[]
+  accounts         Account[]
+
+  @@map("user")
 }
-model Uploads{
-  id      String    @id     @default(uuid())
-  title   String
-  slug    String
-  videoUrl String
+
+model Uploads {
+  id        String     @id @default(uuid())
+  title     String
+  slug      String
+  videoUrl  String
   Thumbnail String
   type      UploadType @default(PUBLIC)
   UserId    String
-  user      User     @relation(fields: [UserId], references: [id])
-  createdAt  DateTime     @default(now())
-  likes       Like[]
+  user      User       @relation(fields: [UserId], references: [id])
+  createdAt DateTime   @default(now())
+  likes     Like[]
 }
-model Like{
-  id    String @id  @default(uuid())
-  userId String
+
+model Like {
+  id       String  @id @default(uuid())
+  userId   String
   uploadId String
-  user    User  @relation(fields: [userId], references: [id])
-  upload Uploads @relation(fields: [uploadId], references: [id])
+  user     User    @relation(fields: [userId], references: [id])
+  upload   Uploads @relation(fields: [uploadId], references: [id])
 
   @@unique([userId, uploadId])
 }
 
-model Subscription{
-  id    String    @id   @default(uuid())
+model Subscription {
+  id            String @id @default(uuid())
   subscriberId  String
   channelUserId String
   subscriber    User   @relation(fields: [subscriberId], references: [id])
@@ -64,8 +75,57 @@ enum Gender {
   Female
   Others
 }
-enum UploadType{
+
+enum UploadType {
   PUBLIC
   PRIVATE
   UNLISTED
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
