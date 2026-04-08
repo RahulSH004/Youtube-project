@@ -46,6 +46,7 @@ model Uploads {
   status        VideoStatus @default(PROCESSING)
   Thumbnail String?
   type      UploadType @default(PUBLIC)
+  description String?
   userId    String
   user      User       @relation(fields: [userId], references: [id])
   createdAt DateTime   @default(now())
