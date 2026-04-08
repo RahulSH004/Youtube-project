@@ -40,12 +40,14 @@ model User {
 model Uploads {
   id        String     @id @default(cuid())
   title     String
-  slug      String
+  slug      String    @unique
   videoUrl  String
-  Thumbnail String
+  videoPublicId String  @unique
+  status        VideoStatus @default(PROCESSING)
+  Thumbnail String?
   type      UploadType @default(PUBLIC)
-  UserId    String
-  user      User       @relation(fields: [UserId], references: [id])
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
   createdAt DateTime   @default(now())
   likes     Like[]
 }
@@ -97,3 +99,8 @@ model Session {
   @@map("session")
 }
 
+enum VideoStatus {
+  PROCESSING
+  READY
+  FAILED
+}
