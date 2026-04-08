@@ -1,10 +1,11 @@
 import z from "zod";
 
-export const upload = z.object({
+export const Upload = z.object({
+    id: z.string(),
+    title: z.string(),
     videoUrl: z.string(),
-    Channelthumnail: z.string(),
-    videoTitle: z.string(),
-    videoDescription: z.string()
+    Channelthumnail: z.string().optional(),
+    Description: z.string()
 })
 
-export type UploadSchema = z.infer<typeof upload>
+export type UploadSchema = z.infer<typeof Upload>
