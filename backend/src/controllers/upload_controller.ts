@@ -3,27 +3,17 @@ import cloudinary from '../utils/cloudinary';
 import { ApiError } from '../utils/ApiError';
 import slugify from 'slugify';
 import { prisma } from '../../db';
-import { Upload } from '../schema/upload_schema';
+import { getUploadSignature, saveVideoMetadata } from '../services/upload_service';
+import { string } from 'zod';
 
 const apiKey = process.env.CLOUDINARY_API_KEY as string;
 const cloudname = process.env.CLOUDINARY_CLOUD_NAME as string;
 
-export function getSignature(req: Request, res: Response) {
+export async function getSignature(req: Request, res: Response) {
     try {
         const userId = req.user?.id;
         if(!userId) return res.status(401).json({message: "Unauthorized"})
-    
-        const timestamp = Math.round((new Date()).getTime() / 1000);
-    
-        const params = {
-            timestamp,
-            folder:`videos/${userId}`,
-        }
-    
-        const signature =  cloudinary.utils.api_sign_request(
-            params,
-            process.env.CLOUDINARY_API_SECRET as string
-        )
+        const { signature, timestamp } = await getUploadSignature(userId, req.body);
         return res.status(200).json({
             signature,
             timestamp,
@@ -43,25 +33,14 @@ export async function saveVideo(req: Request, res: Response, next: NextFunction)
         const userId = req.user?.id;
         if(!userId) return res.status(401).json({message: "Unauthorized"})
         
-        const { title, slug, videoUrl, videoPublicId, description } = req.body;
+        const { title, slug, videoUrl, videoPublicId, description, type } = req.body;
     
-        if(!title || !videoUrl || !videoPublicId) {
+        if(!title || !videoUrl || !videoPublicId || !type) {
             return res.status(400).json({message: "Missing required fields"})
         }
-        const baseslug = `${slugify(title, { lower: true, strict: true })}-${Date.now()}`
-
-        const newupload = await prisma.uploads.create({
-            data: {
-                title,
-                slug: baseslug,
-                videoUrl,
-                videoPublicId,
-                description,
-                userId,
-                type: "PUBLIC",
-                status: "PROCESSING",
-            }
-        })
+        
+        const newupload = await saveVideoMetadata({ title, videoUrl, videoPublicId, Description: description, type }, userId);
+        
         return res.status(201).json({
             id: newupload.id,
             title: newupload.title,
