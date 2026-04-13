@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import { getUploadSignature, saveVideoMetadata } from '../services/upload_service';
 
 
-const apiKey = process.env.CLOUDINARY_API_KEY as string;
-const cloudname = process.env.CLOUDINARY_CLOUD_NAME as string;
+const apiKey = process.env.API_KEY as string;
+const cloudname = process.env.CLOUDINARY_NAME as string;
 
 export async function getSignature(req: Request, res: Response) {
     try {
