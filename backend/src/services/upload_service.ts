@@ -1,10 +1,10 @@
 import { prisma } from "../../db";
 import { UploadSchema } from "../schema/upload_schema";
 import cloudinary from "../utils/cloudinary";
-import { slugify } from "zod";
+import  slugify  from "slugify";
 
 
-export async function getUploadSignature(userid: string, data: UploadSchema){
+export async function getUploadSignature(userid: string){
     const timestamp = Math.round((new Date()).getTime() / 1000);
     
     const params = {
@@ -14,12 +14,12 @@ export async function getUploadSignature(userid: string, data: UploadSchema){
     
     const signature =  cloudinary.utils.api_sign_request(
         params,
-        process.env.CLOUDINARY_API_SECRET as string
+        process.env.API_SECRET as string
     )
     return { 
         signature, 
         timestamp, 
-        apiKey: process.env.CLOUDINARY_API_KEY, 
+        apiKey: process.env.API_KEY, 
         cloudname: process.env.CLOUDINARY_CLOUD_NAME, 
         folder: `videos/${userid}` 
     };

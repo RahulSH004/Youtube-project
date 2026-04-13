@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import { prisma } from "../../db";
 import { signupschema, type SigninSchema, type SignupSchema } from "../schema/auth_schema";
 import { ApiError } from "../utils/ApiError";
@@ -5,7 +7,7 @@ import bcrypt from "bcrypt";
 import { generateaccesstoken } from "../schema/auth_tokens";
 import e from "express";
 
-const saltround = Number(Bun.env.Salt_Round ?? 10);
+const saltround = Number(process.env.SALT_ROUNDS);
 
 
 export async function signupservice (data: SignupSchema) {
@@ -74,7 +76,7 @@ export async function siginservice(data: SigninSchema){
             tokens
         }
     } catch (error) {
-        if(e instanceof ApiError) throw e; 
+        if(error instanceof ApiError) throw error; 
         throw new ApiError(500, "Internal Sever Error")
     }
 }

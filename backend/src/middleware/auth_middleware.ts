@@ -35,7 +35,7 @@ export function validate(schema: ZodSchema){
     return (req: Request, res : Response, next: NextFunction) => {
         const result = schema.safeParse(req.body);
         if(!result.success){
-            throw new ApiError(400, result.error.message)
+            throw new ApiError(400, "Invalid request data")
         }
         req.body = result.data;
         next();

@@ -6,7 +6,7 @@ import { getvideoController } from "../controllers/getvideo_controller";
 
 const uploadRouter = Router();
 
-uploadRouter.post("/upload/signature",authmiddleware, getSignature);
+uploadRouter.get("/upload/signature",authmiddleware, getSignature);
 
 uploadRouter.post("/upload", authmiddleware, saveVideo)
 

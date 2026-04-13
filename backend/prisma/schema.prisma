@@ -27,7 +27,6 @@ model User {
   uploads          Uploads[]
   likes            Like[]
   subscription     Subscription[]
-  name             String
   emailVerified    Boolean        @default(false)
   image            String?
   createdAt        DateTime       @default(now())
