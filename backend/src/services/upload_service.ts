@@ -39,8 +39,28 @@ export async function saveVideoMetadata(data: UploadSchema, userId: string) {
                 description: data.Description,
                 userId,
                 type: "PUBLIC",
-                status: "PROCESSING",
         }
     })
     return newupload;
+}
+
+export async function getUploadSignatureThumbnail(userid: string){
+    const timestamp = Math.round((new Date()).getTime() / 1000);
+    
+    const params = {
+            timestamp,
+            folder:`image/${userid}`,
+    }
+    
+    const signature =  cloudinary.utils.api_sign_request(
+        params,
+        process.env.API_SECRET as string
+    )
+    return { 
+        signature, 
+        timestamp, 
+        apiKey: process.env.API_KEY, 
+        cloudname: process.env.CLOUDINARY_CLOUD_NAME,
+        folder: `image/${userid}`
+    };
 }

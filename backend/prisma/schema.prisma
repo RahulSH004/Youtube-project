@@ -43,7 +43,8 @@ model Uploads {
   videoUrl  String
   videoPublicId String  @unique
   status        VideoStatus @default(PROCESSING)
-  Thumbnail String?
+  Thumbnail String?   @default("")
+  thumbnailPublicUrl String?
   type      UploadType @default(PUBLIC)
   description String?
   userId    String
