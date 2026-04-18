@@ -14,7 +14,7 @@ export function Layout(){
                 <div 
                     onClick={() => navigate("/")}
                     className="font-bold text-xl cursor-pointer"
-                >
+                >git 
                     Youtube
                 </div>
                 <div>
