@@ -16,7 +16,7 @@ export async function signinController(req: Request, res: Response, next: NextFu
     try {
         const data = req.body
         const user = await siginservice(data)
-        res.cookie("accesstoken", user.tokens, {
+        res.cookie("access_token", user.tokens, {
             httpOnly: true,
             secure: true,
             sameSite: "strict",

@@ -6,11 +6,9 @@ import { prisma } from "../../db";
 import { ZodSchema } from "zod";
 
 export async function authmiddleware(req: Request, res: Response, next: NextFunction){
-    const authHeader = req.headers['authorization'];
-    if(!authHeader) throw new ApiError(401, "Unauthorized")
-
-    const token = req.cookies.access_token ||authHeader.split(" ")[1];
-    if(!token) throw new ApiError(401, "Unauthorized")
+    
+    const token = req.cookies.access_token || req.headers['authorization']?.split(" ")[1];
+    if(!token) throw new ApiError(401, "Unauthorized");
     try {
         const decode = jwt.verify(token, access_token) as {id: string};
         const user = await prisma.user.findFirst({
@@ -23,7 +21,7 @@ export async function authmiddleware(req: Request, res: Response, next: NextFunc
         })
         if(!user) throw new ApiError(401, "Unauthorized");
         
-        req.user = user,
+        req.user = user;
         next();
     } catch (error) {
         if(error instanceof ApiError) throw error;

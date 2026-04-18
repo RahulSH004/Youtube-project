@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { signupApi } from "../api/auth"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 export default function Signup(){
-
+    const navigate = useNavigate();
     const [formData, setformData] = useState({
         username: "",
         email: "",
@@ -22,6 +22,7 @@ export default function Signup(){
         try {
             const response = await signupApi(formData)
             console.log("success", response)
+            navigate("/SignIn")
         } catch (error) {
             console.log("Error:", error)
         }

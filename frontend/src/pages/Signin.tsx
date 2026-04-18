@@ -19,7 +19,7 @@ export default function SignIn(){
         try {
             const response = await signinApi(FormData)
             console.log("login", response)
-            navigate("/home")
+            navigate("/")
         } catch (error) {
             console.log("error: ",error)
         }

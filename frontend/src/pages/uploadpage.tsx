@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { getUploadSignature } from "../api/upload";
 
 
 export default function UploadPage() {
@@ -7,9 +8,16 @@ export default function UploadPage() {
 
     const [formdata , setformdata]  = useState({
         title: "",
-        Description: "",
-        type: "public",
+        description: "",
+        visiblity: "public",
     })
+
+    const handlesubmit = async (e) => {
+        e.preventDefault();
+
+        const signtuare  = await getUploadSignature();
+        console.log(signtuare);
+    }
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans antialiased">
@@ -21,7 +29,9 @@ export default function UploadPage() {
           <p className="text-sm text-zinc-500">Video and metadata information</p>
         </header>
 
-        <form className="space-y-10">
+        <form 
+        onSubmit={handlesubmit}
+        className="space-y-10">
           
           {/* File Selection Area */}
           <div className="grid grid-cols-1 gap-8">

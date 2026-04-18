@@ -12,6 +12,7 @@ export default function Home(){
     const fetchvideos = async() => {
         try{
             const response = await api.get("/")
+            console.log(response.data)
             setVideos(response.data.data)
             setIsLoading(false)
         }catch(error){
@@ -24,23 +25,34 @@ export default function Home(){
     }, [])
     return (
         <div>
-            {isLoading ? <div>Loading...</div> : <div className="flex flex-auto">
+            {isLoading ? (<div>Loading...</div>
+                ) : videos.length === 0 ? (
+                    <div className="flex items-center justify-center h-screen">
+                    <div className="text-center">
+                        <p className="text-xl text-gray-500">No videos till now</p>
+                    </div>
+                </div>
+                ) : (
+            
+            
+                <div className="flex flex-auto">
                 {videos.map((video) => (
                     <div
                         key={video.id}
                         onClick={() => navigate(`/video/${video.id}`)}
                         className="cursor-pointer"
                     >
-                    <VideoCard 
-                        thumbnail={video.Thumbnail}
-                        videoUrl={video.videoUrl}
-                        title={video.title}
-                        profilePicture={video.user?.ProfilePicture}
-                        channelName={video.user?.ChannelName}
+                        <VideoCard 
+                            thumbnail={video.Thumbnail}
+                            videoUrl={video.videoUrl}
+                            title={video.title}
+                            profilePicture={video.user?.ProfilePicture}
+                            channelName={video.user?.ChannelName}
                         />
                     </div>
-                ))}
-            </div>}
+                    ))}
+                </div>
+            )}    
         </div>
     )
 }
