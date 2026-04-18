@@ -13,7 +13,7 @@ export function Layout(){
             <nav className="flex justify-between">
                 <div 
                     onClick={() => navigate("/")}
-                    className="font-bold text-xl"
+                    className="font-bold text-xl cursor-pointer"
                 >
                     Youtube
                 </div>

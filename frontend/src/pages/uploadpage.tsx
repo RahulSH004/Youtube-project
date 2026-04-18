@@ -1,24 +1,53 @@
 import { useState } from "react"
-import { getUploadSignature } from "../api/upload";
+import { getUploadSignature, savetodb, uploadToCloudinary } from "../api/upload";
 
 
 export default function UploadPage() {
     const [video, setvideo]  = useState<File | null>(null);
     const [thumbnail, setthumbnail] = useState<File | null>(null);
+    const [isloading, setisloading] = useState(false);
+
 
     const [formdata , setformdata]  = useState({
         title: "",
         description: "",
-        visiblity: "public",
+        type: "PUBLIC",
     })
 
-    const handlesubmit = async (e) => {
+    const handlesubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if(!video || !thumbnail) return alert("Please select both video and thumbnail files");
 
-        const signtuare  = await getUploadSignature();
-        console.log(signtuare);
+        setisloading(true);
+
+        try{
+          const sign = await getUploadSignature();
+
+          const [videoresult , thumbnailresult] = await Promise.all([
+            uploadToCloudinary(video, sign.video, "video"),
+            uploadToCloudinary(thumbnail, sign.thumbnail, "image")
+          ]);
+
+          const slug = formdata.title.toLowerCase().replace(/\s+/g, '-');
+
+          await savetodb({
+            videoUrl: videoresult.secure_url,
+            videoPublicId: videoresult.public_id,
+            thumbnailUrl: thumbnailresult.secure_url,
+            thumbnailPublicId: thumbnailresult.public_id,
+            title: formdata.title,
+            description: formdata.description,
+            slug: slug,
+            type: formdata.type,
+          })
+          alert("Upload successful!");
+        }catch(err){
+          console.error(err);
+          alert("Upload failed. Please try again.");
+        }finally{
+          setisloading(false);
+        }   
     }
-
   return (
     <div className="min-h-screen bg-white text-zinc-900 font-sans antialiased">
       <div className="max-w-2xl mx-auto py-16 px-6">
@@ -42,6 +71,7 @@ export default function UploadPage() {
               <input 
                 type="file" 
                 accept="video/*"
+                onChange={(e) => setvideo(e.target.files?.[0] || null)}
                 className="w-full text-sm text-zinc-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border file:border-zinc-200 file:bg-transparent file:text-zinc-700 file:cursor-pointer hover:file:bg-zinc-50 transition-all"
               />
             </div>
@@ -53,6 +83,7 @@ export default function UploadPage() {
               <input 
                 type="file" 
                 accept="image/*" 
+                onChange={(e) => setthumbnail(e.target.files?.[0] || null)}
                 className="w-full text-sm text-zinc-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border file:border-zinc-200 file:bg-transparent file:text-zinc-700 file:cursor-pointer hover:file:bg-zinc-50 transition-all"
               />
             </div>
@@ -64,6 +95,8 @@ export default function UploadPage() {
               <input 
                 type="text" 
                 placeholder="Title"
+                value={formdata.title}
+                onChange={(e) => setformdata({...formdata, title: e.target.value})}
                 className="w-full bg-transparent border-b border-zinc-200 py-2 focus:border-zinc-900 outline-none transition-colors placeholder:text-zinc-300"
               />
             </div>
@@ -71,6 +104,8 @@ export default function UploadPage() {
             <div className="relative">
               <textarea 
                 placeholder="Description"
+                value={formdata.description}
+                onChange={(e) => setformdata({...formdata, description: e.target.value})}
                 className="w-full bg-transparent border-b border-zinc-200 py-2 focus:border-zinc-900 outline-none transition-colors placeholder:text-zinc-300 resize-none"
               />
             </div>
@@ -78,11 +113,13 @@ export default function UploadPage() {
             <div className="flex items-center justify-between border-b border-zinc-200 py-2">
               <label className="text-sm text-zinc-500">Visibility</label>
               <select 
+                value={formdata.type}
+                onChange={(e) => setformdata({...formdata, type: e.target.value})}
                 className="bg-transparent text-sm font-medium outline-none cursor-pointer text-zinc-800"
               >
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-                <option value="unlisted">Unlisted</option>
+                <option value="PUBLIC">Public</option>
+                <option value="PRIVATE">Private</option>
+                <option value="UNLISTED">Unlisted</option>
               </select>
             </div>
           </div>

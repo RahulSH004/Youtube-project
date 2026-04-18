@@ -1,10 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import { prisma } from "../../db";
 import { UploadSchema } from "../schema/upload_schema";
 import cloudinary from "../utils/cloudinary";
 import  slugify  from "slugify";
 
 
-export async function getUploadSignature(userid: string, type: "video" | "thumbnail" = "video") {
+export async function getUploadSignature(userid: string, type: "video" | "image" = "video") {
     const timestamp = Math.round((new Date()).getTime() / 1000);
     
     const params = {
@@ -20,8 +23,8 @@ export async function getUploadSignature(userid: string, type: "video" | "thumbn
         signature, 
         timestamp, 
         apiKey: process.env.API_KEY, 
-        cloudname: process.env.CLOUDINARY_CLOUD_NAME, 
-        folder: `videos/${userid}` 
+        cloudname: process.env.CLOUDINARY_NAME, 
+        folder: `${type === "video" ? "videos" : "images"}/${userid}`
     };
 }
 
@@ -38,10 +41,10 @@ export async function saveVideoMetadata(data: UploadSchema, userId: string) {
                 videoUrl: data.videoUrl,
                 videoPublicId: data.videoPublicId,
                 Thumbnail: data.Thumbnail,
-                thumbnailPublicUrl: data.thumbnailPublicUrl,
+                thumbnailPublicId: data.thumbnailPublicUrl,
                 description: data.Description,
                 userId,
-                type: "PUBLIC",
+                type: data.type || "PUBLIC",
         }
     })
     return newupload;

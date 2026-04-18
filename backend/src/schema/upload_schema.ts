@@ -7,6 +7,7 @@ export const Upload = z.object({
     videoPublicId: z.string(),
     Thumbnail: z.string().optional(),
     thumbnailPublicUrl: z.string().optional(),
+    thumbnailPublicId: z.string().optional(),
     Description: z.string(),
     type: z.enum(["PUBLIC", "PRIVATE", "UNLISTED"]),
 })

@@ -2,9 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 import { getUploadSignature, saveVideoMetadata } from '../services/upload_service';
 
 
-const apiKey = process.env.API_KEY as string;
-const cloudname = process.env.CLOUDINARY_NAME as string;
-
 export async function getSignature(req: Request, res: Response) {
     try {
         const userId = req.user?.id;
@@ -26,13 +23,20 @@ export async function saveVideo(req: Request, res: Response, next: NextFunction)
         const userId = req.user?.id;
         if(!userId) return res.status(401).json({message: "Unauthorized"})
         
-        const { title, slug, videoUrl, videoPublicId, description, type, thumbnail } = req.body;
+        const { title, slug, videoUrl, videoPublicId, description, type, thumbnail, thumbnailPublicId } = req.body;
     
-        if(!title || !videoUrl || !videoPublicId || !type) {
+        if(!title || !videoUrl || !videoPublicId || !type || !thumbnailPublicId || !description || !slug) {
             return res.status(400).json({message: "Missing required fields"})
         }
-        
-        const newupload = await saveVideoMetadata({ title, videoUrl, videoPublicId, Description: description, type, Thumbnail: thumbnail }, userId);
+        const newupload = await saveVideoMetadata({ 
+                    title, 
+                    videoUrl, 
+                    videoPublicId, 
+                    Thumbnail: thumbnail,
+                    thumbnailPublicId: thumbnailPublicId,
+                    Description: description, 
+                    type
+        }, userId);
         
         return res.status(201).json({
             data:{
@@ -45,10 +49,10 @@ export async function saveVideo(req: Request, res: Response, next: NextFunction)
                 type: newupload.type,
                 createdAt: newupload.createdAt,
             },
-            message: "Video Uploaded successfully",
+                message: "Video Uploaded successfully",
             
-        });
-    } catch (error) {
+            });
+    }catch (error) {
         next(error);
     }
 }

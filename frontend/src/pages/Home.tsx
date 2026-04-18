@@ -13,7 +13,7 @@ export default function Home(){
         try{
             const response = await api.get("/")
             console.log(response.data)
-            setVideos(response.data.data)
+            setVideos(response.data.data.videos)
             setIsLoading(false)
         }catch(error){
             console.log("error: ",error)
@@ -26,15 +26,7 @@ export default function Home(){
     return (
         <div>
             {isLoading ? (<div>Loading...</div>
-                ) : videos.length === 0 ? (
-                    <div className="flex items-center justify-center h-screen">
-                    <div className="text-center">
-                        <p className="text-xl text-gray-500">No videos till now</p>
-                    </div>
-                </div>
                 ) : (
-            
-            
                 <div className="flex flex-auto">
                 {videos.map((video) => (
                     <div
@@ -43,6 +35,7 @@ export default function Home(){
                         className="cursor-pointer"
                     >
                         <VideoCard 
+                            id={video.id}
                             thumbnail={video.Thumbnail}
                             videoUrl={video.videoUrl}
                             title={video.title}
