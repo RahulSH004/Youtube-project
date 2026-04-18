@@ -9,13 +9,10 @@ export async function getSignature(req: Request, res: Response) {
     try {
         const userId = req.user?.id;
         if(!userId) return res.status(401).json({message: "Unauthorized"})
-        const { signature, timestamp } = await getUploadSignature(userId);
+        const SignatureData = await getUploadSignature(userId);
         return res.status(200).json({
-            signature,
-            timestamp,
-            apiKey,
-            cloudname,
-            folder: `videos/${userId}`, 
+            video: SignatureData,
+            thumbnail: SignatureData,
         })
     } catch (error) {
         console.error("Error getting signature:", error);
@@ -29,13 +26,13 @@ export async function saveVideo(req: Request, res: Response, next: NextFunction)
         const userId = req.user?.id;
         if(!userId) return res.status(401).json({message: "Unauthorized"})
         
-        const { title, slug, videoUrl, videoPublicId, description, type } = req.body;
+        const { title, slug, videoUrl, videoPublicId, description, type, thumbnail } = req.body;
     
         if(!title || !videoUrl || !videoPublicId || !type) {
             return res.status(400).json({message: "Missing required fields"})
         }
         
-        const newupload = await saveVideoMetadata({ title, videoUrl, videoPublicId, Description: description, type }, userId);
+        const newupload = await saveVideoMetadata({ title, videoUrl, videoPublicId, Description: description, type, Thumbnail: thumbnail }, userId);
         
         return res.status(201).json({
             data:{

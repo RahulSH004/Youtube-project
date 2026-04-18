@@ -19,3 +19,4 @@ export interface UploadState {
   error: string | null
   videoUrl: string | null
 }
+
